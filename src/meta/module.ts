@@ -9,7 +9,7 @@
 import {MetaDocumentPayload, MetaDocument, MetaDocumentType, MetaOptions} from "./type";
 import path from "path";
 import fs from "fs";
-import {Image, Group} from "../type";
+import {MetaImage, MetaGroup} from "../type";
 
 export async function findMetaFile(
     baseDir: string,
@@ -42,8 +42,8 @@ async function readMetaFile<T extends MetaDocumentType>(
     options ??= {};
 
     const fileName: string = type === MetaDocument.IMAGE ?
-        (options.imageFileName ?? 'master-image.json') :
-        (options.groupFileName ?? 'master-image-group.json');
+        (options.imageFileName ?? 'image.json') :
+        (options.groupFileName ?? 'image-group.json');
 
     const filePath: string = path.join(baseDir, fileName);
 
@@ -57,20 +57,20 @@ async function readMetaFile<T extends MetaDocumentType>(
     const directoryName: string = directorPath.split(path.sep).pop();
 
     const rawContent = await fs.promises.readFile(filePath);
-    const data: Image | Group = JSON.parse(rawContent.toString('utf-8'));
+    const data: MetaImage | MetaGroup = JSON.parse(rawContent.toString('utf-8'));
 
     switch (type) {
         case MetaDocument.IMAGE:
-            const imageData: Image = data as Image;
+            const imageData: MetaImage = data as MetaImage;
             imageData.name ??= baseDir.split(path.sep).pop();
             imageData.path ??= baseDir;
 
             return {
                 type,
-                data: data as Image
+                data: data as MetaImage
             } as MetaDocumentPayload<T>;
         case MetaDocument.GROUP:
-            const groupData: Group = data as Group;
+            const groupData: MetaGroup = data as MetaGroup;
             groupData.id ??= directoryName;
             groupData.name ??= groupData.id;
 
@@ -80,5 +80,6 @@ async function readMetaFile<T extends MetaDocumentType>(
             } as MetaDocumentPayload<T>;
     }
 
+    /* istanbul ignore next */
     return undefined;
 }

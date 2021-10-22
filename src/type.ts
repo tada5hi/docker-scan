@@ -7,7 +7,7 @@
 
 import {MetaOptions} from "./meta";
 
-export type Group = {
+export type MetaGroup = {
     id: string,
     name: string,
     version?: string,
@@ -15,15 +15,15 @@ export type Group = {
     description?: string
 }
 
-export type Image = {
+export type MetaImage = {
     path: string,
     name: string,
     groupId?: string
 };
 
 export type ScanResult = {
-    groups: Group[],
-    images: Image[]
+    groups: MetaGroup[],
+    images: MetaImage[]
 }
 
 export type ScanOptions = {

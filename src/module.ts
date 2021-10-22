@@ -60,9 +60,11 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
                 continue;
             }
 
+            let newPath : string = options.path === '' ? dirent.name :  options.path + '/' + dirent.name;
+
             const result = await scanDirectory(path.join(dirPath, dirent.name), {
                 ...options,
-                path: options.path + '/' + dirent.name,
+                path: newPath,
                 groupId
             });
 
