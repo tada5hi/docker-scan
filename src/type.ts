@@ -7,23 +7,25 @@
 
 import {MetaOptions} from "./meta";
 
-export type MetaGroup = {
+export type Group = {
     id: string,
     name: string,
     version?: string,
     license?: string,
-    description?: string
+    description?: string,
+    [key: string]: any
 }
 
-export type MetaImage = {
+export type Image = {
     path: string,
     name: string,
-    groupId?: string
+    groupId?: string,
+    [key: string]: any
 };
 
 export type ScanResult = {
-    groups: MetaGroup[],
-    images: MetaImage[]
+    groups: Group[],
+    images: Image[]
 }
 
 export type ScanOptions = {

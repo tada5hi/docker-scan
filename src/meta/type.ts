@@ -6,8 +6,8 @@
  */
 
 import {
-    MetaImage,
-    MetaGroup
+    Image,
+    Group
 } from "../type";
 
 export enum MetaDocument {
@@ -19,7 +19,7 @@ export type MetaDocumentType = `${MetaDocument}`;
 
 export type MetaDocumentPayload<T extends MetaDocumentType> = {
     type: T,
-    data: T extends 'image' | MetaDocument.IMAGE ? MetaImage : MetaGroup
+    data: T extends 'image' | MetaDocument.IMAGE ? Image : Group
 };
 
 export type MetaOptions = {

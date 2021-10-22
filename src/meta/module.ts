@@ -9,7 +9,7 @@
 import {MetaDocumentPayload, MetaDocument, MetaDocumentType, MetaOptions} from "./type";
 import path from "path";
 import fs from "fs";
-import {MetaImage, MetaGroup} from "../type";
+import {Image, Group} from "../type";
 
 export async function findMetaFile(
     baseDir: string,
@@ -57,20 +57,20 @@ async function readMetaFile<T extends MetaDocumentType>(
     const directoryName: string = directorPath.split(path.sep).pop();
 
     const rawContent = await fs.promises.readFile(filePath);
-    const data: MetaImage | MetaGroup = JSON.parse(rawContent.toString('utf-8'));
+    const data: Image | Group = JSON.parse(rawContent.toString('utf-8'));
 
     switch (type) {
         case MetaDocument.IMAGE:
-            const imageData: MetaImage = data as MetaImage;
+            const imageData: Image = data as Image;
             imageData.name ??= baseDir.split(path.sep).pop();
             imageData.path ??= baseDir;
 
             return {
                 type,
-                data: data as MetaImage
+                data: data as Image
             } as MetaDocumentPayload<T>;
         case MetaDocument.GROUP:
-            const groupData: MetaGroup = data as MetaGroup;
+            const groupData: Group = data as Group;
             groupData.id ??= directoryName;
             groupData.name ??= groupData.id;
 
