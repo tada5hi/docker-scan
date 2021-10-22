@@ -1,6 +1,6 @@
 {
     "name": "fs-docker",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Scan filesystem directory for Dockerfiles and create metadata output.",
     "author": {
         "name": "Peter Placzek",
