@@ -1,5 +1,5 @@
 [![npm version](https://badge.fury.io/js/fs-docker.svg)](https://badge.fury.io/js/fs-docker)
-[![Master Workflow](https://github.com/Tada5hi/fs-docker/workflows/main/badge.svg)](https://github.com/Tada5hi/fs-docker)
+[![CI](https://github.com/Tada5hi/fs-docker/actions/workflows/main.yml/badge.svg)](https://github.com/Tada5hi/fs-docker/actions/workflows/main.yml)
 
 # FS Docker 💾
 
