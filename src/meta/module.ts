@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2021.
+ * Author Peter Placzek (tada5hi)
+ * For the full copyright and license information,
+ * view the LICENSE file that was distributed with this source code.
+ */
+
+
+import {MetaDocumentPayload, MetaDocument, MetaDocumentType, MetaOptions} from "./type";
+import path from "path";
+import fs from "fs";
+import {Image, Group} from "../type";
+
+export async function findMetaFile(
+    baseDir: string,
+    options?: MetaOptions
+) {
+    options ??= {};
+
+    let content = await readMetaFile(
+        baseDir,
+        MetaDocument.IMAGE,
+        options
+    );
+
+    if(typeof content === 'undefined') {
+        return await readMetaFile(
+            baseDir,
+            MetaDocument.GROUP,
+            options
+        );
+    }
+
+    return content;
+}
+
+async function readMetaFile<T extends MetaDocumentType>(
+    baseDir: string,
+    type: T,
+    options?: MetaOptions
+) : Promise<MetaDocumentPayload<T>|undefined> {
+    options ??= {};
+
+    const fileName: string = type === MetaDocument.IMAGE ?
+        (options.imageFileName ?? 'master-image.json') :
+        (options.groupFileName ?? 'master-image-group.json');
+
+    const filePath: string = path.join(baseDir, fileName);
+
+    try {
+        await fs.promises.access(filePath);
+    } catch (e) {
+        return undefined;
+    }
+
+    const directorPath: string = path.dirname(filePath);
+    const directoryName: string = directorPath.split(path.sep).pop();
+
+    const rawContent = await fs.promises.readFile(filePath);
+    const data: Image | Group = JSON.parse(rawContent.toString('utf-8'));
+
+    switch (type) {
+        case MetaDocument.IMAGE:
+            const imageData: Image = data as Image;
+            imageData.name ??= baseDir.split(path.sep).pop();
+            imageData.path ??= baseDir;
+
+            return {
+                type,
+                data: data as Image
+            } as MetaDocumentPayload<T>;
+        case MetaDocument.GROUP:
+            const groupData: Group = data as Group;
+            groupData.id ??= directoryName;
+            groupData.name ??= groupData.id;
+
+            return {
+                type: MetaDocument.GROUP,
+                data: groupData
+            } as MetaDocumentPayload<T>;
+    }
+
+    return undefined;
+}
