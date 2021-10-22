@@ -12,6 +12,9 @@ describe('src/api/sort.ts', () => {
     it('should scan directory correctly', async () => {
         const directory = await scanDirectory(path.join(__dirname, '..', 'data'));
 
+        directory.images = directory.images.sort((a,b) => a.name.localeCompare(b.name));
+        directory.groups = directory.groups.sort((a,b) => a.name.localeCompare(b.name));
+
         expect(directory).toEqual({
             images: [
                 {name: 'Cool image', groupId: 'group', path: 'group/image'},
