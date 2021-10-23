@@ -19,6 +19,7 @@ export type Group = {
 }
 
 export type Image = {
+    id: string,
     name: string,
     path: string,
     groupId?: string,

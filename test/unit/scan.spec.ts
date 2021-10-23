@@ -17,11 +17,11 @@ describe('src/api/sort.ts', () => {
 
         expect(directory).toEqual({
             images: [
-                {name: 'Cool image', groupId: 'group', path: `group${path.sep}image`, virtualPath: 'group'},
-                {name: 'image', groupId: undefined, path: 'image', virtualPath: ''}
+                {id: 'image', name: 'Cool image', groupId: 'group', path: `group${path.sep}image`, virtualPath: 'group/image'},
+                {id: 'image', name: 'image', groupId: undefined, path: 'image', virtualPath: 'image'}
             ],
             groups: [
-                {name: 'Group', license: 'MIT', id: 'group', path: 'group', virtualPath: ''}
+                {id: 'group', name: 'Group', license: 'MIT', path: 'group', virtualPath: ''}
             ]
         } as ScanResult);
     });

@@ -5,7 +5,7 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-import {ScanOptions, ScanResult} from "./type";
+import {Image, ScanOptions, ScanResult} from "./type";
 import path from "path";
 import fs from "fs";
 import {findMetaFile, MetaDocument} from "./meta";
@@ -28,21 +28,26 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
 
     let groupId : string | undefined = options.groupId;
 
+    const dirName: string = dirPath.split(path.sep).pop();
+
     const isImage = (metaFile && metaFile.type === MetaDocument.IMAGE) || await isImageDirectory(dirPath);
     if(isImage) {
-        response.images.push({
+        const image : Image = {
+            id: metaFile ? metaFile.data.id ?? dirName : dirName,
             name: metaFile ? metaFile.data.name : dirPath.split(path.sep).pop(),
             groupId,
             path: options.path,
             virtualPath: options.virtualPath
-        });
+        };
+
+        image.virtualPath = extendPath('virtual', image.virtualPath, image.id);
+
+        response.images.push(image);
 
         return response;
     } else {
         const isImageGroup = metaFile && metaFile.type === MetaDocument.GROUP;
         if (isImageGroup) {
-            const dirName: string = dirPath.split(path.sep).pop();
-
             metaFile.data.id ??= dirName;
             metaFile.data.name ??= dirName;
             metaFile.data.virtualPath = options.virtualPath;
