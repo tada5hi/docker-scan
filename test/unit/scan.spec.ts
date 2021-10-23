@@ -18,10 +18,13 @@ describe('src/api/sort.ts', () => {
         expect(directory).toEqual({
             images: [
                 {id: 'image', name: 'Cool image', groupId: 'group', path: `group${path.sep}image`, virtualPath: 'group/image'},
-                {id: 'image', name: 'image', groupId: undefined, path: 'image', virtualPath: 'image'}
+                {id: 'image', name: 'image', groupId: undefined, path: 'image', virtualPath: 'image'},
+                {id: 'meta-id', name: 'MetaId', groupId: 'sub-sub-group', path: `group${path.sep}undefined${path.sep}sub-sub-group${path.sep}image`, virtualPath: 'group/sub-sub-group/meta-id'}
             ],
             groups: [
-                {id: 'group', name: 'Group', license: 'MIT', path: 'group', virtualPath: ''}
+                {id: 'group', name: 'Group', license: 'MIT', path: 'group', virtualPath: 'group'},
+                {id: 'sub-group', name: 'SubGroup', path: `group${path.sep}sub-group`, virtualPath: 'group/sub-group'},
+                {id: 'sub-sub-group', name: 'SubSubGroup', path: `group${path.sep}undefined${path.sep}sub-sub-group`, virtualPath: 'group/sub-sub-group'}
             ]
         } as ScanResult);
     });

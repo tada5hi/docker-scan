@@ -17,6 +17,7 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
         path: '',
         virtualPath: '',
     };
+
     options.meta ??= {};
 
     const response : ScanResult = {
@@ -26,16 +27,16 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
 
     const metaFile = await findMetaFile(dirPath, options.meta);
 
-    let groupId : string | undefined = options.groupId;
-
     const dirName: string = dirPath.split(path.sep).pop();
 
     const isImage = (metaFile && metaFile.type === MetaDocument.IMAGE) || await isImageDirectory(dirPath);
+    const isImageGroup = metaFile && metaFile.type === MetaDocument.GROUP;
+
     if(isImage) {
         const image : Image = {
             id: metaFile ? metaFile.data.id ?? dirName : dirName,
             name: metaFile ? metaFile.data.name : dirPath.split(path.sep).pop(),
-            groupId,
+            groupId: options.groupId,
             path: options.path,
             virtualPath: options.virtualPath
         };
@@ -45,19 +46,15 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
         response.images.push(image);
 
         return response;
-    } else {
-        const isImageGroup = metaFile && metaFile.type === MetaDocument.GROUP;
-        if (isImageGroup) {
-            metaFile.data.id ??= dirName;
-            metaFile.data.name ??= dirName;
-            metaFile.data.virtualPath = options.virtualPath;
-            metaFile.data.path = options.path;
+    } else if (isImageGroup) {
+        metaFile.data.id ??= dirName;
+        metaFile.data.name ??= dirName;
+        metaFile.data.virtualPath = extendPath('virtual', options.virtualPath, metaFile.data.id) ;
+        metaFile.data.path = options.path;
 
-            response.groups.push(metaFile.data);
+        response.groups.push(metaFile.data);
 
-            groupId ??= metaFile.data.id;
-            options.virtualPath = extendPath('virtual', options.virtualPath, metaFile.data.id);
-        }
+        options.virtualPath = metaFile.data.virtualPath;
     }
 
     const entries = await fs.promises.opendir(dirPath, {encoding: 'utf-8'});
@@ -66,12 +63,11 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
             continue;
         }
 
-        let newPath : string = extendPath('fs', options.path, dirent.name);
-
         const result = await scanDirectory(path.join(dirPath, dirent.name), {
             ...options,
-            path: newPath,
-            groupId
+            path: extendPath('fs', options.path, dirent.name),
+            virtualPath: options.virtualPath,
+            groupId: isImageGroup ? metaFile.data.id : options.groupId
         });
 
         response.images = [...response.images, ...result.images];
