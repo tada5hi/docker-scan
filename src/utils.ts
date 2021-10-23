@@ -16,3 +16,11 @@ export async function isImageDirectory(dirPath: string) {
         return false;
     }
 }
+
+export function extendPath(type: 'fs' | 'virtual', base: string, value: string) : string {
+    const separator : string = type === 'fs' ? path.sep : '/';
+
+    return !!base && base.length > 0 ?
+        base + separator + value :
+        value;
+}

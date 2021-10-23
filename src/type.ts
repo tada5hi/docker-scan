@@ -8,18 +8,21 @@
 import {MetaOptions} from "./meta";
 
 export type Group = {
-    id: string,
-    name: string,
-    version?: string,
-    license?: string,
     description?: string,
+    id: string,
+    license?: string,
+    name: string,
+    path: string,
+    virtualPath: string,
+    version?: string,
     [key: string]: any
 }
 
 export type Image = {
-    path: string,
     name: string,
+    path: string,
     groupId?: string,
+    virtualPath: string,
     [key: string]: any
 };
 
@@ -31,5 +34,6 @@ export type ScanResult = {
 export type ScanOptions = {
     meta?: MetaOptions,
     path: string,
-    groupId?: string
+    groupId?: string,
+    virtualPath: string
 }

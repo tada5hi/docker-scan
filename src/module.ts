@@ -9,12 +9,13 @@ import {ScanOptions, ScanResult} from "./type";
 import path from "path";
 import fs from "fs";
 import {findMetaFile, MetaDocument} from "./meta";
-import {isImageDirectory} from "./utils";
+import {extendPath, isImageDirectory} from "./utils";
 
 export async function scanDirectory(dirPath: string, options?: ScanOptions) {
     options ??= {
+        groupId: undefined,
         path: '',
-        groupId: undefined
+        virtualPath: '',
     };
     options.meta ??= {};
 
@@ -27,50 +28,49 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
 
     let groupId : string | undefined = options.groupId;
 
-    if(
-        typeof metaFile !== 'undefined' &&
-        metaFile.type === MetaDocument.GROUP
-    ) {
-        groupId = metaFile.data.id;
-    }
-
     const isImage = (metaFile && metaFile.type === MetaDocument.IMAGE) || await isImageDirectory(dirPath);
     if(isImage) {
         response.images.push({
             name: metaFile ? metaFile.data.name : dirPath.split(path.sep).pop(),
             groupId,
-            path: options.path
+            path: options.path,
+            virtualPath: options.virtualPath
         });
+
+        return response;
     } else {
         const isImageGroup = metaFile && metaFile.type === MetaDocument.GROUP;
-        if(isImageGroup) {
-            const dirName : string =  dirPath.split(path.sep).pop();
+        if (isImageGroup) {
+            const dirName: string = dirPath.split(path.sep).pop();
 
             metaFile.data.id ??= dirName;
             metaFile.data.name ??= dirName;
-
-            groupId ??= metaFile.data.id;
+            metaFile.data.virtualPath = options.virtualPath;
+            metaFile.data.path = options.path;
 
             response.groups.push(metaFile.data);
+
+            groupId ??= metaFile.data.id;
+            options.virtualPath = extendPath('virtual', options.virtualPath, metaFile.data.id);
+        }
+    }
+
+    const entries = await fs.promises.opendir(dirPath, {encoding: 'utf-8'});
+    for await (const dirent of entries) {
+        if(!dirent.isDirectory()) {
+            continue;
         }
 
-        const entries = await fs.promises.opendir(dirPath, {encoding: 'utf-8'});
-        for await (const dirent of entries) {
-            if(!dirent.isDirectory()) {
-                continue;
-            }
+        let newPath : string = extendPath('fs', options.path, dirent.name);
 
-            let newPath : string = options.path === '' ? dirent.name :  options.path + '/' + dirent.name;
+        const result = await scanDirectory(path.join(dirPath, dirent.name), {
+            ...options,
+            path: newPath,
+            groupId
+        });
 
-            const result = await scanDirectory(path.join(dirPath, dirent.name), {
-                ...options,
-                path: newPath,
-                groupId
-            });
-
-            response.images = [...response.images, ...result.images];
-            response.groups = [...response.groups, ...result.groups];
-        }
+        response.images = [...response.images, ...result.images];
+        response.groups = [...response.groups, ...result.groups];
     }
 
     return response;
