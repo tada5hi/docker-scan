@@ -15,7 +15,8 @@
     "scripts": {
         "build": "rm -rf ./dist && tsc",
         "test": "cross-env NODE_ENV=test jest --config ./test/jest.config.js",
-        "test:coverage": "cross-env NODE_ENV=test jest --config ./test/jest.config.js --coverage"
+        "test:coverage": "cross-env NODE_ENV=test jest --config ./test/jest.config.js --coverage",
+        "prepublishOnly": "npm run build"
     },
     "keywords": [
         "docker",
