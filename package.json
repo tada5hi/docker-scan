@@ -12,6 +12,9 @@
         "url": "https://github.com/tada5hi/fs-docker.git"
     },
     "main": "dist/index.js",
+    "files": [
+        "dist/"
+    ],
     "scripts": {
         "build": "rimraf ./dist && tsc",
         "test": "cross-env NODE_ENV=test jest --config ./test/jest.config.js",
