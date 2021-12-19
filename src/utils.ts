@@ -10,7 +10,7 @@ import path from "path";
 
 export async function isImageDirectory(dirPath: string) {
     try {
-        await fs.promises.access(path.join(dirPath, 'Dockerfile'), fs.constants.R_OK);
+        await fs.promises.access(path.join(dirPath, 'Dockerfile'), fs.constants.F_OK | fs.constants.R_OK);
         return true;
     } catch (e) {
         return false;
