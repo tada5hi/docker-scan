@@ -5,29 +5,30 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-
-import {MetaDocumentPayload, MetaDocument, MetaDocumentType, MetaOptions} from "./type";
-import path from "path";
-import fs from "fs";
-import {Image, Group} from "../type";
+import path from 'path';
+import fs from 'fs';
+import {
+    MetaDocument, MetaDocumentPayload, MetaDocumentType, MetaOptions,
+} from './type';
+import { Group, Image } from '../type';
 
 export async function findMetaFile(
     baseDir: string,
-    options?: MetaOptions
+    options?: MetaOptions,
 ) {
     options ??= {};
 
-    let content = await readMetaFile(
+    const content = await readMetaFile(
         baseDir,
         MetaDocument.IMAGE,
-        options
+        options,
     );
 
-    if(typeof content === 'undefined') {
-        return await readMetaFile(
+    if (typeof content === 'undefined') {
+        return readMetaFile(
             baseDir,
             MetaDocument.GROUP,
-            options
+            options,
         );
     }
 
@@ -37,8 +38,8 @@ export async function findMetaFile(
 async function readMetaFile<T extends MetaDocumentType>(
     baseDir: string,
     type: T,
-    options?: MetaOptions
-) : Promise<MetaDocumentPayload<T>|undefined> {
+    options?: MetaOptions,
+) : Promise<MetaDocumentPayload<T> | undefined> {
     options ??= {};
 
     const fileName: string = type === MetaDocument.IMAGE ?
@@ -60,24 +61,26 @@ async function readMetaFile<T extends MetaDocumentType>(
     const data: Image | Group = JSON.parse(rawContent.toString('utf-8'));
 
     switch (type) {
-        case MetaDocument.IMAGE:
+        case MetaDocument.IMAGE: {
             const imageData: Image = data as Image;
             imageData.name ??= baseDir.split(path.sep).pop();
             imageData.path ??= baseDir;
 
             return {
                 type,
-                data: data as Image
+                data: data as Image,
             } as MetaDocumentPayload<T>;
-        case MetaDocument.GROUP:
+        }
+        case MetaDocument.GROUP: {
             const groupData: Group = data as Group;
             groupData.id ??= directoryName;
             groupData.name ??= groupData.id;
 
             return {
                 type: MetaDocument.GROUP,
-                data: groupData
+                data: groupData,
             } as MetaDocumentPayload<T>;
+        }
     }
 
     /* istanbul ignore next */

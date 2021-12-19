@@ -5,7 +5,7 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-import {MetaOptions} from "./meta";
+import { MetaOptions } from './meta';
 
 export type Group = {
     description?: string,
@@ -16,7 +16,7 @@ export type Group = {
     virtualPath: string,
     version?: string,
     [key: string]: any
-}
+};
 
 export type Image = {
     id: string,
@@ -30,11 +30,11 @@ export type Image = {
 export type ScanResult = {
     groups: Group[],
     images: Image[]
-}
+};
 
 export type ScanOptions = {
     meta?: MetaOptions,
     path: string,
     groupId?: string,
     virtualPath: string
-}
+};

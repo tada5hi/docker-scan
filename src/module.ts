@@ -5,11 +5,11 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-import {Image, ScanOptions, ScanResult} from "./type";
-import path from "path";
-import fs from "fs";
-import {findMetaFile, MetaDocument} from "./meta";
-import {extendPath, isImageDirectory} from "./utils";
+import path from 'path';
+import fs from 'fs';
+import { Image, ScanOptions, ScanResult } from './type';
+import { MetaDocument, findMetaFile } from './meta';
+import { extendPath, isImageDirectory } from './utils';
 
 export async function scanDirectory(dirPath: string, options?: ScanOptions) {
     options ??= {
@@ -22,8 +22,8 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
 
     const response : ScanResult = {
         images: [],
-        groups: []
-    }
+        groups: [],
+    };
 
     const metaFile = await findMetaFile(dirPath, options.meta);
 
@@ -32,13 +32,13 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
     const isImage = (metaFile && metaFile.type === MetaDocument.IMAGE) || await isImageDirectory(dirPath);
     const isImageGroup = metaFile && metaFile.type === MetaDocument.GROUP;
 
-    if(isImage) {
+    if (isImage) {
         const image : Image = {
             id: metaFile ? metaFile.data.id ?? dirName : dirName,
             name: metaFile ? metaFile.data.name : dirPath.split(path.sep).pop(),
             groupId: options.groupId,
             path: options.path,
-            virtualPath: options.virtualPath
+            virtualPath: options.virtualPath,
         };
 
         image.virtualPath = extendPath('virtual', image.virtualPath, image.id);
@@ -46,10 +46,10 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
         response.images.push(image);
 
         return response;
-    } else if (isImageGroup) {
+    } if (isImageGroup) {
         metaFile.data.id ??= dirName;
         metaFile.data.name ??= dirName;
-        metaFile.data.virtualPath = extendPath('virtual', options.virtualPath, metaFile.data.id) ;
+        metaFile.data.virtualPath = extendPath('virtual', options.virtualPath, metaFile.data.id);
         metaFile.data.path = options.path;
 
         response.groups.push(metaFile.data);
@@ -57,9 +57,11 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
         options.virtualPath = metaFile.data.virtualPath;
     }
 
-    const entries = await fs.promises.opendir(dirPath, {encoding: 'utf-8'});
+    const entries = await fs.promises.opendir(dirPath, { encoding: 'utf-8' });
+    // eslint-disable-next-line no-restricted-syntax
     for await (const dirent of entries) {
-        if(!dirent.isDirectory()) {
+        if (!dirent.isDirectory()) {
+            // eslint-disable-next-line no-continue
             continue;
         }
 
@@ -67,7 +69,7 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
             ...options,
             path: extendPath('fs', options.path, dirent.name),
             virtualPath: options.virtualPath,
-            groupId: isImageGroup ? metaFile.data.id : options.groupId
+            groupId: isImageGroup ? metaFile.data.id : options.groupId,
         });
 
         response.images = [...response.images, ...result.images];

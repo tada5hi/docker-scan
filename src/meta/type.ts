@@ -6,13 +6,14 @@
  */
 
 import {
+    Group,
     Image,
-    Group
-} from "../type";
+} from '../type';
 
+// eslint-disable-next-line no-shadow
 export enum MetaDocument {
     IMAGE = 'image',
-    GROUP = 'group'
+    GROUP = 'group',
 }
 
 export type MetaDocumentType = `${MetaDocument}`;
@@ -25,5 +26,4 @@ export type MetaDocumentPayload<T extends MetaDocumentType> = {
 export type MetaOptions = {
     imageFileName?: string,
     groupFileName?: string
-}
-
+};
