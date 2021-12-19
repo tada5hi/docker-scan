@@ -1,5 +1,5 @@
 {
-    "name": "fs-docker",
+    "name": "docker-scan",
     "version": "1.0.0",
     "description": "Scan filesystem directory for Dockerfiles and create metadata output.",
     "author": {
@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/tada5hi/fs-docker.git"
+        "url": "https://github.com/tada5hi/docker-scan.git"
     },
     "main": "dist/index.js",
     "files": [

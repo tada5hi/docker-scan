@@ -1,7 +1,7 @@
-[![npm version](https://badge.fury.io/js/fs-docker.svg)](https://badge.fury.io/js/fs-docker)
-[![CI](https://github.com/Tada5hi/fs-docker/actions/workflows/main.yml/badge.svg)](https://github.com/Tada5hi/fs-docker/actions/workflows/main.yml)
+[![npm version](https://badge.fury.io/js/docker-scan.svg)](https://badge.fury.io/js/docker-scan)
+[![CI](https://github.com/Tada5hi/docker-scan/actions/workflows/main.yml/badge.svg)](https://github.com/Tada5hi/docker-scan/actions/workflows/main.yml)
 
-# FS Docker 💾
+# Docker Scan 💾
 This is a library to scan for docker images in a defined directory and associate them to (nested) groups 🔥.
 
 **Table of Contents**
@@ -15,7 +15,7 @@ This is a library to scan for docker images in a defined directory and associate
 ## Installation
 
 ```bash
-npm install fs-docker --save
+npm install docker-scan --save
 ```
 
 ## Specification
@@ -59,7 +59,7 @@ To demonstrate the usage of the package, the test data directory path (`test/dat
 to simplify how to replicate the code example and use it for an own use cases.
 
 ```typescript
-import {scanDirectory} from "fs-docker";
+import {scanDirectory} from "docker-scan";
 
 (async () => {
     // Provide a base directory path to scan
