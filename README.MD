@@ -1,8 +1,9 @@
-[![npm version](https://badge.fury.io/js/docker-scan.svg)](https://badge.fury.io/js/docker-scan)
-[![CI](https://github.com/Tada5hi/docker-scan/actions/workflows/main.yml/badge.svg)](https://github.com/Tada5hi/docker-scan/actions/workflows/main.yml)
-
 # Docker Scan 💾
 This is a library to scan for docker images in a defined directory and associate them to (nested) groups 🔥.
+
+[![npm version](https://badge.fury.io/js/docker-scan.svg)](https://badge.fury.io/js/docker-scan)
+[![CI](https://github.com/Tada5hi/docker-scan/actions/workflows/main.yml/badge.svg)](https://github.com/Tada5hi/docker-scan/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/tada5hi/docker-scan/branch/master/graph/badge.svg?token=4A8WTC7XGF)](https://codecov.io/gh/tada5hi/docker-scan)
 
 **Table of Contents**
 
