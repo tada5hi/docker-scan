@@ -30,9 +30,6 @@
         "metadata",
         "groups"
     ],
-    "bin": {
-        "typeorm-extension": "dist/cli/index.js"
-    },
     "license": "MIT",
     "devDependencies": {
         "@tada5hi/eslint-config-typescript": "^0.0.24",
