@@ -25,7 +25,8 @@
         "docker",
         "image",
         "scan",
-        "metadata"
+        "metadata",
+        "groups"
     ],
     "bin": {
         "typeorm-extension": "dist/cli/index.js"

@@ -51,12 +51,12 @@ the same directory as the Dockerfile.
 
 ### Group
 A group has the same base properties as an image, expect of the **groupId** property. The only other difference
-is, that the file must be named `image-group.json`.
+is, that the descriptor file must be named `image-group.json`.
 
 ## Usage
 
 To demonstrate the usage of the package, the test data directory path (`test/data`) is used as scan path,
-to simplify how to replicate the code example and use it for an own use case.
+to simplify how to replicate the code example and use it for an own use cases.
 
 ```typescript
 import {scanDirectory} from "fs-docker";
