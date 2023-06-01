@@ -20,6 +20,7 @@ import {
 
 async function loadJSONRecord(filePath: string) {
     const content = await load(filePath);
+    /* istanbul ignore next */
     if (!isObject(content)) {
         throw new Error('The file content could not be read.');
     }
