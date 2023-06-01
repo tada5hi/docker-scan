@@ -5,9 +5,13 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-
+import resolve from '@rollup/plugin-node-resolve';
 import { transform } from "@swc/core";
 import pkg from './package.json' assert {type: 'json'};
+
+const extensions = [
+    '.js', '.jsx', '.ts', '.tsx',
+];
 
 export default [
     {
@@ -18,6 +22,9 @@ export default [
         external: [],
 
         plugins: [
+            // Allows node_modules resolution
+            resolve({ extensions}),
+
             // Compile TypeScript/JavaScript files
             {
                 name: 'swc',

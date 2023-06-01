@@ -7,7 +7,7 @@
 
 import path from 'path';
 import fs from 'fs';
-import { Image, ScanOptions, ScanResult } from './type';
+import type { Image, ScanOptions, ScanResult } from './type';
 import { MetaDocument, findMetaFile } from './meta';
 import { extendPath, isImageDirectory } from './utils';
 
@@ -27,15 +27,13 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
 
     const metaFile = await findMetaFile(dirPath, options.meta);
 
-    const dirName: string = dirPath.split(path.sep).pop();
+    const dirName: string = dirPath.split(path.sep).pop() || 'unknown';
 
     const isImage = (metaFile && metaFile.type === MetaDocument.IMAGE) || await isImageDirectory(dirPath);
-    const isImageGroup = metaFile && metaFile.type === MetaDocument.GROUP;
-
     if (isImage) {
         const image : Image = {
             id: metaFile ? metaFile.data.id ?? dirName : dirName,
-            name: metaFile ? metaFile.data.name : dirPath.split(path.sep).pop(),
+            name: metaFile ? metaFile.data.name : dirName,
             groupId: options.groupId,
             path: options.path,
             virtualPath: options.virtualPath,
@@ -46,7 +44,10 @@ export async function scanDirectory(dirPath: string, options?: ScanOptions) {
         response.images.push(image);
 
         return response;
-    } if (isImageGroup) {
+    }
+
+    const isImageGroup = metaFile && metaFile.type === MetaDocument.GROUP;
+    if (isImageGroup) {
         metaFile.data.id ??= dirName;
         metaFile.data.name ??= dirName;
         metaFile.data.virtualPath = extendPath('virtual', options.virtualPath, metaFile.data.id);
