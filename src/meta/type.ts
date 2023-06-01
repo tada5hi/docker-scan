@@ -5,25 +5,25 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-import {
-    Group,
-    Image,
-} from '../type';
-
 // eslint-disable-next-line no-shadow
-export enum MetaDocument {
+export enum MetaType {
     IMAGE = 'image',
     GROUP = 'group',
 }
 
-export type MetaDocumentType = `${MetaDocument}`;
+export enum MetaFileName {
+    IMAGE = 'image.json',
+    GROUP = 'image-group.json',
+}
 
-export type MetaDocumentPayload<T extends MetaDocumentType> = {
-    type: T,
-    data: T extends 'image' | MetaDocument.IMAGE ? Image : Group
+export type ImageMeta = {
+    name: string,
+    path: string,
+    [key: string]: any
 };
 
-export type MetaOptions = {
-    imageFileName?: string,
-    groupFileName?: string
+export type GroupMeta = {
+    id: string,
+    name: string,
+    [key: string]: any
 };

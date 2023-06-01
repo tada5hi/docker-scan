@@ -5,8 +5,6 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-import { MetaOptions } from './meta';
-
 export type Group = {
     description?: string,
     id: string,
@@ -33,7 +31,6 @@ export type ScanResult = {
 };
 
 export type ScanOptions = {
-    meta?: MetaOptions,
     path: string,
     groupId?: string,
     virtualPath: string

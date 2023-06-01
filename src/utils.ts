@@ -5,8 +5,8 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export async function isImageDirectory(dirPath: string) {
     try {
@@ -23,4 +23,13 @@ export function extendPath(type: 'fs' | 'virtual', base: string, value: string) 
     return !!base && base.length > 0 ?
         base + separator + value :
         value;
+}
+
+export function extractDirectoryName(input: string) {
+    const index = input.lastIndexOf(path.sep);
+    if (index === -1 || index === input.length - 1) {
+        throw new Error('The directory name could not be extracted.');
+    }
+
+    return input.substring(index + 1);
 }
