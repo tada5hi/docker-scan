@@ -11,8 +11,9 @@ import path from 'node:path';
 export async function isImageDirectory(dirPath: string) {
     try {
         await fs.promises.access(path.join(dirPath, 'Dockerfile'), fs.constants.F_OK | fs.constants.R_OK);
+
         return true;
-    } catch (e) {
+    } catch {
         return false;
     }
 }
@@ -27,6 +28,7 @@ export function extendPath(type: 'fs' | 'virtual', base: string, value: string) 
 
 export function extractDirectoryName(input: string) {
     const index = input.lastIndexOf(path.sep);
+
     if (index === -1 || index === input.length - 1) {
         throw new SyntaxError('The directory name could not be extracted.');
     }

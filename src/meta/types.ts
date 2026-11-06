@@ -5,7 +5,7 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-// eslint-disable-next-line no-shadow
+
 export enum MetaType {
     IMAGE = 'image',
     GROUP = 'group',
