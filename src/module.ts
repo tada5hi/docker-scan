@@ -9,10 +9,16 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { distinctArray, merge } from 'smob';
 import type {
-    Group, Image, ScanOptions, ScanResult,
-} from './type';
+    Group,
+    Image,
+    ScanOptions,
+    ScanResult,
+} from './types';
 import {
-    MetaType, detectMetaTypeOfDirectory, readGroupMeta, readImageMeta,
+    MetaType,
+    detectMetaTypeOfDirectory,
+    readGroupMeta,
+    readImageMeta,
 } from './meta';
 import { extendPath, extractDirectoryName, isImageDirectory } from './utils';
 
@@ -32,6 +38,7 @@ export async function scanDirectory(
     };
 
     const type = await detectMetaTypeOfDirectory(directoryPath);
+
     if (type === MetaType.GROUP) {
         const meta = await readGroupMeta(directoryPath);
         const group : Group = {
@@ -53,6 +60,7 @@ export async function scanDirectory(
             virtualPath: options.virtualPath,
             path: options.path,
         };
+
         image.virtualPath = extendPath('virtual', image.virtualPath, image.id);
 
         response.images.push(image);
@@ -74,10 +82,9 @@ export async function scanDirectory(
 
     const entries = await fs.promises.opendir(directoryPath, { encoding: 'utf-8' });
 
-    // eslint-disable-next-line no-restricted-syntax
+
     for await (const dirent of entries) {
         if (!dirent.isDirectory()) {
-            // eslint-disable-next-line no-continue
             continue;
         }
 
