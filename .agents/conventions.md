@@ -1,6 +1,6 @@
 # Conventions
 
-Use the installed shared ESLint configuration through the repository's lint command. Keep interface/type naming and declaration placement compatible with public exports; preserve intentional deep import facades.
+Use the installed shared ESLint configuration through the repository's lint command. Keep interface/type naming and declaration placement compatible with public exports; qualify filesystem/deep type compatibility against the declared exports map.
 
 Preserve Dockerfile discovery and metadata contracts; tests use repository fixtures rather than modifying user project files.
 
