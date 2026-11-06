@@ -25,6 +25,21 @@ Docker Scan checks image.json first, then image-group.json, then Dockerfile. Ima
 
 <img src=".github/assets/mechanism.svg" width="960" alt="Docker Scan checks image.json first, then image-group.json, then Dockerfile. Images stop recursion; groups and unclassified directories recurse into child directories." />
 
+**Table of Contents**
+
+- [Why Docker Scan?](#why-docker-scan)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Specification](#specification)
+  - [Image](#image)
+  - [Group](#group)
+  - [Repository fixture example](#repository-fixture-example)
+- [Directory metadata](#directory-metadata)
+- [API](#api)
+- [Notes](#notes)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
 
 ```bash
@@ -44,6 +59,87 @@ for (const image of result.images) {
 }
 console.log(result.groups);
 ```
+
+## Specification
+
+### Image
+
+An image directory contains a `Dockerfile` or `image.json`. The descriptor can replace the Dockerfile for discovery. Image records have the following fields, plus any additional descriptor fields:
+
+| Field | Meaning |
+|---|---|
+| `id` | Descriptor ID, or the directory name when absent |
+| `name` | Descriptor display name, or the directory name when absent |
+| `groupId` | ID of the nearest enclosing group, or `undefined` outside a group |
+| `path` | Path relative to the scan root, using host-platform separators |
+| `virtualPath` | Enclosing group IDs and the image ID joined with `/` |
+
+### Group
+
+`image-group.json` marks a group. Its `id` and `name` fall back to the directory name. Group records include `path` and `virtualPath` but do not receive a scanner-derived `groupId`. Descriptor fields such as `description`, `license` and `version` are preserved. Nested groups extend the virtual path with their IDs; ordinary intermediate directories extend only the filesystem path.
+
+### Repository fixture example
+
+From a repository checkout, run this against the included `test/data` tree. `scanDirectory` is asynchronous, so await it before reading the arrays.
+
+```typescript
+import { scanDirectory } from 'docker-scan';
+
+const result = await scanDirectory('test/data');
+console.log(JSON.stringify(result, null, 2));
+```
+
+The fixture includes an image named `Cool image`, an image with the explicit ID `meta-id`, nested groups and an ungrouped image. The complete output from the included fixture is shown below; filesystem enumeration order is not an API guarantee.
+
+```json
+{
+  "images": [
+    {
+      "name": "Cool image",
+      "path": "group/image",
+      "id": "image",
+      "groupId": "group",
+      "virtualPath": "group/image"
+    },
+    {
+      "id": "meta-id",
+      "name": "MetaId",
+      "path": "group/undefined/sub-sub-group/image",
+      "groupId": "sub-sub-group",
+      "virtualPath": "group/sub-sub-group/meta-id"
+    },
+    {
+      "id": "image",
+      "name": "image",
+      "virtualPath": "image",
+      "path": "image"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Group",
+      "license": "MIT",
+      "id": "group",
+      "virtualPath": "group",
+      "path": "group"
+    },
+    {
+      "name": "SubGroup",
+      "id": "sub-group",
+      "virtualPath": "group/sub-group",
+      "path": "group/sub-group"
+    },
+    {
+      "name": "SubSubGroup",
+      "id": "sub-sub-group",
+      "virtualPath": "group/sub-sub-group",
+      "path": "group/undefined/sub-sub-group"
+    }
+  ]
+}
+```
+
+This path uses POSIX separators. Windows uses `\` in filesystem paths (escaped as `\\` in JSON); virtual paths always use `/`. `undefined` in the fixture path is a literal directory name, not a missing value. An ungrouped image has `groupId: undefined` in memory, so JSON serialization omits that field rather than emitting `null`.
 
 ## Directory metadata
 
