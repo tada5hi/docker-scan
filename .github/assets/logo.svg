@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="docker-scan-b-title docker-scan-b-desc">
+<title id="docker-scan-b-title">Docker Scan — The discovery sweep</title>
+<desc id="docker-scan-b-desc">An open scan arc picks out three Dockerfile records from a nested filesystem branch.</desc>
+<style>
+:root{--accent:#299eb0;--second:#9474b9;--ink:#253447;--paper:#f7fafc;--line:#8394a7;--wash:#299eb018}
+@media(prefers-color-scheme:dark){:root{--ink:#e4ebf3;--paper:#182332;--line:#8495aa;--wash:#299eb022}}
+.a{stroke:var(--accent)}.b{stroke:var(--second)}.af{fill:var(--accent)}.bf{fill:var(--second)}.ink{fill:var(--ink)}.paper{stroke:var(--line)}.line{stroke:var(--line)}.wash{fill:var(--wash)}.white{fill:#fff}.neutral{fill:var(--paper)}
+</style>
+<path d="M60 57 V190 M60 96 H103 M60 144 H134 M60 190 H167" class="a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" /><rect x="38" y="37" width="45" height="32" rx="3" class="af" /><rect x="105" y="80" width="49" height="32" rx="3" class="bf" /><rect x="136" y="128" width="49" height="32" rx="3" class="bf" /><rect x="169" y="174" width="49" height="32" rx="3" class="bf" /><path d="M113 91 H146 M144 139 H177 M177 185 H210" class="" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#fff"/><path d="M102 29 A103 103 0 0 1 233 156" class="a" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" /><path d="M223 142 L233 156 L239 140" class="a" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
