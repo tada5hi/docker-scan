@@ -5,7 +5,6 @@
  * view the LICENSE file that was distributed with this source code.
  */
 
-import { isObject, load } from 'locter';
 import path from 'node:path';
 import fs from 'node:fs';
 import { extractDirectoryName } from '../utils';
@@ -19,10 +18,9 @@ import {
 } from './types';
 
 async function loadJSONRecord(filePath: string) {
-    const content = await load(filePath);
+    const content = JSON.parse(await fs.promises.readFile(filePath, 'utf-8'));
 
-    /* istanbul ignore next */
-    if (!isObject(content)) {
+    if (!content || typeof content !== 'object' || Array.isArray(content)) {
         throw new Error('The file content could not be read.');
     }
 
